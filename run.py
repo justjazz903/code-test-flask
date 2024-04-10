@@ -1,43 +1,29 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
+from flask_cors import CORS
 import requests
-from datetime import datetime, timedelta
 
 api_key = "a697471847014605ae2105854241004"
 api_base_url = "http://api.weatherapi.com/v1"
-current_url = "current.json"
 forecast_url = "forecast.json"
-history_url = "history.json"
 
 app = Flask(__name__)
-
-@app.route("/current", methods=["GET"])
-def current():
-    city = "Nanjing"
-    url = f"{api_base_url}/{current_url}?key={api_key}&q={city}"
-    response = requests.get(url)
-    data = response.json()
-    return data
+CORS(app)
 
 
-@app.route("/forecast", methods=["GET"])
+@app.route("/forecast", methods=["POST"])
 def forecast():
-    city = "Nanjing"
-    url = f"{api_base_url}/{forecast_url}?key={api_key}&q={city}&days=3"
-    response = requests.get(url)
-    data = response.json()
-    return data
-
-
-@app.route("/history", methods=["GET"])
-def history():
-    city = "Nanjing"
-    # dt should be 3 days ago
-    dt = datetime.now() - timedelta(days=3)
-    dt = dt.strftime("%Y-%m-%d")
-    url = f"{api_base_url}/{history_url}?key={api_key}&q={city}&dt={dt}"
-    response = requests.get(url)
-    data = response.json()
-    return data
+    try:
+        data = request.get_json()
+        city = data.get("city")
+        print(city)
+        url = f"{api_base_url}/{forecast_url}?key={api_key}&q={city}&days=2"
+        response = requests.get(url)
+        data = response.json()
+        if 'error' in data:
+            return {"error": data["error"]["message"]}
+        return data
+    except Exception as e:
+        return {"error": str(e)}
 
 
 app.run(debug=True)
