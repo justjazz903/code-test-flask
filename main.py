@@ -15,7 +15,6 @@ def forecast():
     try:
         data = request.get_json()
         city = data.get("city")
-        print(city)
         url = f"{api_base_url}/{forecast_url}?key={api_key}&q={city}&days=2"
         response = requests.get(url)
         data = response.json()
@@ -25,5 +24,5 @@ def forecast():
     except Exception as e:
         return {"error": str(e)}
 
-
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=8080)
