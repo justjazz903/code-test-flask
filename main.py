@@ -7,10 +7,10 @@ api_base_url = "http://api.weatherapi.com/v1"
 forecast_url = "forecast.json"
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://justjazz903.com"])
 
 
-@app.route("/forecast", methods=["POST"])
+@app.route("/code-test-flask/forecast", methods=["POST"])
 def forecast():
     try:
         data = request.get_json()

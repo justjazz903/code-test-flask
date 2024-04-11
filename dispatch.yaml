@@ -1,0 +1,8 @@
+dispatch:
+  # Default service routes
+  - url: "justjazz903.com/"
+    service: default
+
+  # Code-test service routes
+  - url: "justjazz903.com/code-test-flask/*"
+    service: code-test-flask
